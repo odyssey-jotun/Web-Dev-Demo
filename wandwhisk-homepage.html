@@ -84,15 +84,42 @@
   .hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:8px}
   .hamburger span{width:26px;height:3px;background:var(--magenta-deep);border-radius:2px;transition:.3s}
 
-  /* ---------- hero ---------- */
-  .hero{position:relative;padding:70px 0 90px;overflow:hidden}
-  .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:54px;align-items:center}
+  /* ---------- hero (full-width image banner) ---------- */
+  .hero{
+    position:relative;overflow:hidden;
+    min-height:clamp(460px,68vh,640px);
+    display:flex;align-items:center;
+  }
+  /* the photo placeholder fills the whole banner */
+  .hero-photo{
+    position:absolute;inset:0;z-index:0;
+    background:
+      radial-gradient(circle at 74% 32%, rgba(255,223,142,.45), transparent 42%),
+      linear-gradient(150deg,var(--pink-mist) 0%, var(--pink-blush) 55%, var(--pink-rose) 100%);
+  }
+  /* dessert illustration sits on the right side of the banner as a stand-in subject */
+  .hero-photo .illus{
+    position:absolute;right:6%;top:50%;transform:translateY(-50%);
+    width:min(38%,360px);aspect-ratio:4/5;background:none;box-shadow:none;border-radius:0;
+    animation:float 6s ease-in-out infinite;
+  }
+  .hero-photo .illus svg{width:100%;height:100%;max-width:none}
+  /* soft pastel scrim, just enough to lift dark text off the left, fading right */
+  .hero-photo::after{
+    content:"";position:absolute;inset:0;z-index:1;
+    background:linear-gradient(90deg, rgba(255,233,243,.78) 0%, rgba(255,233,243,.4) 40%, rgba(255,209,230,.12) 68%, transparent 100%);
+  }
+  .hero-photo .photo-note{
+    position:absolute;z-index:3;bottom:16px;right:18px;left:auto;transform:none;
+  }
+  .hero .wrap{position:relative;z-index:4;width:100%}
+  .hero-copy{max-width:560px}
   .eyebrow{
     display:inline-flex;align-items:center;gap:8px;
-    background:rgba(255,143,192,.22);color:var(--magenta-deep);
+    background:rgba(255,255,255,.65);color:var(--magenta-deep);
     padding:8px 16px;border-radius:999px;font-weight:700;font-size:.8rem;
     letter-spacing:1.5px;text-transform:uppercase;margin-bottom:22px;
-    border:1px solid rgba(255,143,192,.4);
+    border:1px solid rgba(255,143,192,.5);backdrop-filter:blur(4px);
   }
   .hero h1{
     font-family:var(--font-display);
@@ -115,41 +142,25 @@
   .btn-primary:hover{transform:translateY(-3px);box-shadow:0 20px 44px -16px rgba(181,35,107,.7)}
   .btn-ghost{background:#fff;color:var(--magenta-deep);box-shadow:var(--shadow-soft);border:1.5px solid var(--pink-blush)}
   .btn-ghost:hover{transform:translateY(-3px);background:var(--pink-mist)}
+  /* gentler primary button in the pastel hero so the top zone stays soft */
+  .hero .btn-primary{background:linear-gradient(120deg,var(--pink-rose),var(--pink-candy));color:#fff}
+  .hero .btn-ghost{background:rgba(255,255,255,.85)}
 
-  /* hero image placeholder */
-  .hero-visual{position:relative}
-  .img-ph{
-    position:relative;border-radius:var(--radius-lg);overflow:hidden;
-    display:grid;place-items:center;text-align:center;color:#fff;
-    border:2px dashed rgba(255,255,255,.7);
-    box-shadow:var(--shadow-card);
-  }
-  .img-ph .ph-label{
-    position:relative;z-index:2;font-weight:700;font-size:.82rem;letter-spacing:1px;
-    text-transform:uppercase;background:rgba(94,39,80,.55);padding:8px 16px;border-radius:999px;
-    backdrop-filter:blur(4px);
-  }
-  .img-ph::after{
-    content:"";position:absolute;inset:0;z-index:1;
-    background:repeating-linear-gradient(45deg,rgba(255,255,255,.06) 0 12px,transparent 12px 24px);
-  }
-  .hero-visual .img-ph{
-    aspect-ratio:4/5;
-    background:
-      radial-gradient(circle at 30% 25%, var(--gold-soft), transparent 45%),
-      linear-gradient(150deg,var(--pink-rose),var(--magenta-deep));
-    animation:float 6s ease-in-out infinite;
-  }
   @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+  /* hero badges float over the banner, bottom area */
   .hero-badge{
-    position:absolute;z-index:3;background:#fff;border-radius:22px;padding:14px 18px;
+    position:absolute;z-index:5;background:#fff;border-radius:22px;padding:14px 18px;
     box-shadow:var(--shadow-card);font-weight:700;color:var(--magenta-deep);
     display:flex;align-items:center;gap:10px;
   }
   .hero-badge .big{font-family:var(--font-display);font-size:1.6rem;line-height:1;color:var(--pink-candy)}
-  .hero-badge.b1{top:18px;left:-26px;animation:float 5s ease-in-out infinite}
-  .hero-badge.b2{bottom:30px;right:-20px;animation:float 7s ease-in-out infinite .6s}
+  .hero-badge.b1{bottom:26px;left:24px;animation:float 5s ease-in-out infinite}
+  .hero-badge.b2{top:26px;right:24px;animation:float 7s ease-in-out infinite .6s}
   .hero-badge small{display:block;font-weight:600;color:var(--ink-soft);font-size:.72rem;text-transform:uppercase;letter-spacing:.5px}
+
+  /* leftover placeholder helper (unused now, kept harmless) */
+  .img-ph{position:relative;border-radius:var(--radius-lg);overflow:hidden;display:grid;place-items:center;text-align:center;color:#fff;border:2px dashed rgba(255,255,255,.7);box-shadow:var(--shadow-card)}
+  .img-ph .ph-label{position:relative;z-index:2;font-weight:700;font-size:.82rem;letter-spacing:1px;text-transform:uppercase;background:rgba(94,39,80,.55);padding:8px 16px;border-radius:999px;backdrop-filter:blur(4px)}
 
   /* ---------- section scaffolding ---------- */
   section{position:relative;padding:78px 0}
@@ -275,13 +286,14 @@
 
   /* ---------- responsive ---------- */
   @media(max-width:920px){
-    .hero-grid,.ic-grid,.event-card{grid-template-columns:1fr}
-    .hero-visual{order:-1;max-width:420px;margin:0 auto}
+    .ic-grid,.event-card{grid-template-columns:1fr}
     .menu-grid{grid-template-columns:1fr 1fr}
     .promise-grid{gap:16px}
     .promise-card{padding:26px 18px}
     .foot-grid{grid-template-columns:1fr 1fr}
     .event-card .img-ph{min-height:200px}
+    /* shrink the side illustration so it doesn't crowd the copy */
+    .hero-photo .illus{width:min(34%,260px);right:3%;opacity:.92}
   }
   @media(max-width:620px){
     .nav-links{
@@ -291,11 +303,13 @@
     .nav-links.open{display:flex}
     .hamburger{display:flex}
     .menu-grid,.promise-grid,.foot-grid{grid-template-columns:1fr}
-    .hero{padding:46px 0 64px}
     section{padding:58px 0}
     .event-body{padding:30px 26px}
-    .hero-badge.b1{left:-6px}
-    .hero-badge.b2{right:-4px}
+    /* on phones: hide the side illustration, keep a soft pastel wash, full-width readable copy */
+    .hero{min-height:clamp(420px,72vh,560px)}
+    .hero-photo .illus{display:none}
+    .hero-photo::after{background:linear-gradient(180deg, rgba(255,233,243,.82) 0%, rgba(255,233,243,.55) 55%, rgba(255,209,230,.3) 100%)}
+    .hero-copy{max-width:none}
   }
 </style>
 </head>
@@ -308,8 +322,8 @@
   <div class="nav-inner">
     <a href="#" class="brand"><span class="mark">✦</span> Wand &amp; Whisk</a>
     <nav class="nav-links" id="navLinks">
-      <a href="#icecream">The Ice Cream</a>
       <a href="#menu">Menu</a>
+      <a href="#about">About Us</a>
       <a href="#events">Events</a>
       <a href="#guild" class="nav-cta">Join the Guild</a>
     </nav>
@@ -321,7 +335,36 @@
 
 <!-- HERO -->
 <section class="hero">
-  <div class="wrap hero-grid">
+  <!-- full-bleed photo banner (illustration is a stand-in for the real hero photo) -->
+  <div class="hero-photo">
+    <div class="illus">
+      <svg viewBox="0 0 220 280" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustration of a strawberry crepe cone with whipped cream and a star">
+        <defs>
+          <linearGradient id="creamG" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#ffe3f0"/>
+          </linearGradient>
+          <linearGradient id="coneG" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#ffd1e6"/><stop offset="1" stop-color="#ff8fc0"/>
+          </linearGradient>
+        </defs>
+        <!-- cone -->
+        <path d="M88 150 L132 150 L116 268 Q110 276 104 268 Z" fill="url(#coneG)" stroke="#b5236b" stroke-width="3" stroke-linejoin="round"/>
+        <path d="M95 168 L125 168 M99 188 L121 188 M103 208 L117 208" stroke="#b5236b" stroke-width="2" stroke-linecap="round" opacity=".5"/>
+        <!-- whipped swirl -->
+        <path d="M70 150 Q60 120 80 112 Q72 92 96 92 Q98 70 116 80 Q132 66 142 90 Q162 92 150 114 Q166 126 150 150 Z" fill="url(#creamG)" stroke="#b5236b" stroke-width="3" stroke-linejoin="round"/>
+        <!-- strawberries -->
+        <circle cx="98" cy="116" r="11" fill="#ff5da2" stroke="#b5236b" stroke-width="2.5"/>
+        <circle cx="132" cy="112" r="10" fill="#ff5da2" stroke="#b5236b" stroke-width="2.5"/>
+        <circle cx="95" cy="113" r="1.6" fill="#fff"/><circle cx="103" cy="119" r="1.6" fill="#fff"/>
+        <circle cx="129" cy="109" r="1.6" fill="#fff"/><circle cx="136" cy="115" r="1.6" fill="#fff"/>
+        <!-- star topper -->
+        <path d="M116 54 l5 13 14 1 -11 9 4 14 -12 -8 -12 8 4 -14 -11 -9 14 -1 z" fill="#f3c14b" stroke="#b5236b" stroke-width="2.5" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <span class="photo-note">✦ Hero photo lands here (person enjoying the ice cream)</span>
+  </div>
+  <!-- overlaid copy: vertically centered, left-aligned -->
+  <div class="wrap">
     <div class="hero-copy reveal">
       <span class="eyebrow">✦ Little Rock, Arkansas</span>
       <h1>Luxury Desserts for the <span class="glow">Wayward Adventurer</span></h1>
@@ -331,35 +374,6 @@
         <a href="#menu" class="btn btn-primary">View Menu ✦</a>
         <a href="#guild" class="btn btn-ghost">Join the Guild</a>
       </div>
-    </div>
-    <div class="hero-visual reveal">
-      <div class="illus">
-        <svg viewBox="0 0 220 280" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustration of a strawberry crepe cone with whipped cream and a star">
-          <defs>
-            <linearGradient id="creamG" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#ffe3f0"/>
-            </linearGradient>
-            <linearGradient id="coneG" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stop-color="#ffd1e6"/><stop offset="1" stop-color="#ff8fc0"/>
-            </linearGradient>
-          </defs>
-          <!-- cone -->
-          <path d="M88 150 L132 150 L116 268 Q110 276 104 268 Z" fill="url(#coneG)" stroke="#b5236b" stroke-width="3" stroke-linejoin="round"/>
-          <path d="M95 168 L125 168 M99 188 L121 188 M103 208 L117 208" stroke="#b5236b" stroke-width="2" stroke-linecap="round" opacity=".5"/>
-          <!-- whipped swirl -->
-          <path d="M70 150 Q60 120 80 112 Q72 92 96 92 Q98 70 116 80 Q132 66 142 90 Q162 92 150 114 Q166 126 150 150 Z" fill="url(#creamG)" stroke="#b5236b" stroke-width="3" stroke-linejoin="round"/>
-          <!-- strawberries -->
-          <circle cx="98" cy="116" r="11" fill="#ff5da2" stroke="#b5236b" stroke-width="2.5"/>
-          <circle cx="132" cy="112" r="10" fill="#ff5da2" stroke="#b5236b" stroke-width="2.5"/>
-          <circle cx="95" cy="113" r="1.6" fill="#fff"/><circle cx="103" cy="119" r="1.6" fill="#fff"/>
-          <circle cx="129" cy="109" r="1.6" fill="#fff"/><circle cx="136" cy="115" r="1.6" fill="#fff"/>
-          <!-- star topper -->
-          <path d="M116 54 l5 13 14 1 -11 9 4 14 -12 -8 -12 8 4 -14 -11 -9 14 -1 z" fill="#f3c14b" stroke="#b5236b" stroke-width="2.5" stroke-linejoin="round"/>
-        </svg>
-        <span class="photo-note">✦ Hero photo lands here</span>
-      </div>
-      <div class="hero-badge b1"><span class="big">12.5%</span><small>milk fat<br>real ice cream</small></div>
-      <div class="hero-badge b2">✦ <span>Made fresh<br><small>in front of you</small></span></div>
     </div>
   </div>
 </section>
@@ -491,7 +505,7 @@
 </section>
 
 <!-- PROMISE -->
-<section class="promise">
+<section class="promise" id="about">
   <div class="wrap">
     <div class="sec-head reveal">
       <p class="kicker">Our Promise</p>
