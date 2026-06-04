@@ -1,2 +1,632 @@
-# Web-Dev-Demo
-Demo Sites for Outset
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wand &amp; Whisk Café — Luxury Desserts for the Wayward Adventurer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Quicksand:wght@400;500;600;700&family=Gloock&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* ---- brand tokens (re-skinnable for sister sites) ---- */
+    --pink-candy:#ff5da2;
+    --pink-rose:#ff8fc0;
+    --pink-blush:#ffd1e6;
+    --pink-mist:#ffe9f3;
+    --magenta-deep:#b5236b;
+    --plum:#5e2750;
+    --cream:#fff6fb;
+    --gold:#f3c14b;
+    --gold-soft:#ffdf8e;
+    --ink:#4a2138;
+    --ink-soft:#7a4a64;
+    --white:#ffffff;
+
+    --font-display:"Gloock", serif;
+    --font-serif:"Fraunces", serif;
+    --font-body:"Quicksand", sans-serif;
+
+    --radius:26px;
+    --radius-lg:40px;
+    --shadow-soft:0 18px 50px -20px rgba(181,35,107,.45);
+    --shadow-card:0 24px 60px -28px rgba(181,35,107,.55);
+    --maxw:1180px;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:var(--font-body);
+    color:var(--ink);
+    background:
+      radial-gradient(120% 80% at 80% -10%, var(--pink-blush) 0%, transparent 55%),
+      radial-gradient(120% 90% at -10% 10%, var(--pink-mist) 0%, transparent 50%),
+      var(--cream);
+    overflow-x:hidden;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ---------- decorative sparkle layer ---------- */
+  .sparkles{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden}
+  .sparkle{position:absolute;color:var(--gold);opacity:.0;animation:twinkle 4s infinite ease-in-out}
+  @keyframes twinkle{
+    0%,100%{opacity:0;transform:scale(.4) rotate(0deg)}
+    50%{opacity:.9;transform:scale(1) rotate(45deg)}
+  }
+
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px;position:relative;z-index:2}
+
+  /* ---------- nav ---------- */
+  header.nav{
+    position:sticky;top:0;z-index:50;
+    backdrop-filter:blur(14px);
+    background:linear-gradient(180deg, rgba(255,246,251,.92), rgba(255,246,251,.6));
+    border-bottom:1px solid rgba(255,143,192,.35);
+  }
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;max-width:var(--maxw);margin:0 auto}
+  .brand{display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-size:1.35rem;color:var(--magenta-deep);letter-spacing:.3px}
+  .brand .mark{
+    width:38px;height:38px;border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, var(--gold-soft), var(--pink-candy) 70%);
+    display:grid;place-items:center;font-size:1.1rem;box-shadow:var(--shadow-soft);
+    flex-shrink:0;
+  }
+  .nav-links{display:flex;gap:30px;align-items:center}
+  .nav-links a{text-decoration:none;color:var(--ink-soft);font-weight:600;font-size:.95rem;transition:color .2s}
+  .nav-links a:hover{color:var(--pink-candy)}
+  .nav-cta{
+    background:var(--pink-candy);color:#fff;padding:10px 22px;border-radius:999px;
+    font-weight:700;box-shadow:var(--shadow-soft);transition:transform .2s, box-shadow .2s;
+  }
+  .nav-cta:hover{transform:translateY(-2px);color:#fff !important;box-shadow:0 16px 36px -14px rgba(255,93,162,.7)}
+  .hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:8px}
+  .hamburger span{width:26px;height:3px;background:var(--magenta-deep);border-radius:2px;transition:.3s}
+
+  /* ---------- hero (full-width image banner) ---------- */
+  .hero{
+    position:relative;overflow:hidden;
+    min-height:clamp(460px,68vh,640px);
+    display:flex;align-items:center;
+  }
+  /* the photo placeholder fills the whole banner */
+  .hero-photo{
+    position:absolute;inset:0;z-index:0;
+    background:
+      radial-gradient(circle at 74% 32%, rgba(255,223,142,.45), transparent 42%),
+      linear-gradient(150deg,var(--pink-mist) 0%, var(--pink-blush) 55%, var(--pink-rose) 100%);
+  }
+  /* dessert illustration sits on the right side of the banner as a stand-in subject */
+  .hero-photo .illus{
+    position:absolute;right:6%;top:50%;transform:translateY(-50%);
+    width:min(38%,360px);aspect-ratio:4/5;background:none;box-shadow:none;border-radius:0;
+    animation:float 6s ease-in-out infinite;
+  }
+  .hero-photo .illus svg{width:100%;height:100%;max-width:none}
+  /* soft pastel scrim, just enough to lift dark text off the left, fading right */
+  .hero-photo::after{
+    content:"";position:absolute;inset:0;z-index:1;
+    background:linear-gradient(90deg, rgba(255,233,243,.78) 0%, rgba(255,233,243,.4) 40%, rgba(255,209,230,.12) 68%, transparent 100%);
+  }
+  .hero-photo .photo-note{
+    position:absolute;z-index:3;bottom:16px;right:18px;left:auto;transform:none;
+  }
+  .hero .wrap{position:relative;z-index:4;width:100%}
+  .hero-copy{max-width:560px}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;
+    background:rgba(255,255,255,.65);color:var(--magenta-deep);
+    padding:8px 16px;border-radius:999px;font-weight:700;font-size:.8rem;
+    letter-spacing:1.5px;text-transform:uppercase;margin-bottom:22px;
+    border:1px solid rgba(255,143,192,.5);backdrop-filter:blur(4px);
+  }
+  .hero h1{
+    font-family:var(--font-display);
+    font-size:clamp(2.6rem,5.5vw,4.4rem);
+    line-height:1.02;color:var(--plum);margin-bottom:18px;letter-spacing:.5px;
+  }
+  .hero h1 .glow{
+    background:linear-gradient(120deg,var(--pink-candy),var(--magenta-deep) 60%,var(--gold));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .hero .sub{font-family:var(--font-serif);font-style:italic;font-size:clamp(1.15rem,2.2vw,1.5rem);color:var(--ink-soft);margin-bottom:14px}
+  .hero p.lede{font-size:1.05rem;color:var(--ink-soft);max-width:46ch;margin-bottom:30px}
+  .hero-ctas{display:flex;gap:14px;flex-wrap:wrap}
+  .btn{
+    border:none;cursor:pointer;font-family:var(--font-body);font-weight:700;font-size:1rem;
+    padding:15px 30px;border-radius:999px;text-decoration:none;display:inline-flex;align-items:center;gap:9px;
+    transition:transform .2s, box-shadow .2s;
+  }
+  .btn-primary{background:linear-gradient(120deg,var(--pink-candy),var(--magenta-deep));color:#fff;box-shadow:var(--shadow-soft)}
+  .btn-primary:hover{transform:translateY(-3px);box-shadow:0 20px 44px -16px rgba(181,35,107,.7)}
+  .btn-ghost{background:#fff;color:var(--magenta-deep);box-shadow:var(--shadow-soft);border:1.5px solid var(--pink-blush)}
+  .btn-ghost:hover{transform:translateY(-3px);background:var(--pink-mist)}
+  /* gentler primary button in the pastel hero so the top zone stays soft */
+  .hero .btn-primary{background:linear-gradient(120deg,var(--pink-rose),var(--pink-candy));color:#fff}
+  .hero .btn-ghost{background:rgba(255,255,255,.85)}
+
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+  /* hero badges float over the banner, bottom area */
+  .hero-badge{
+    position:absolute;z-index:5;background:#fff;border-radius:22px;padding:14px 18px;
+    box-shadow:var(--shadow-card);font-weight:700;color:var(--magenta-deep);
+    display:flex;align-items:center;gap:10px;
+  }
+  .hero-badge .big{font-family:var(--font-display);font-size:1.6rem;line-height:1;color:var(--pink-candy)}
+  .hero-badge.b1{bottom:26px;left:24px;animation:float 5s ease-in-out infinite}
+  .hero-badge.b2{top:26px;right:24px;animation:float 7s ease-in-out infinite .6s}
+  .hero-badge small{display:block;font-weight:600;color:var(--ink-soft);font-size:.72rem;text-transform:uppercase;letter-spacing:.5px}
+
+  /* leftover placeholder helper (unused now, kept harmless) */
+  .img-ph{position:relative;border-radius:var(--radius-lg);overflow:hidden;display:grid;place-items:center;text-align:center;color:#fff;border:2px dashed rgba(255,255,255,.7);box-shadow:var(--shadow-card)}
+  .img-ph .ph-label{position:relative;z-index:2;font-weight:700;font-size:.82rem;letter-spacing:1px;text-transform:uppercase;background:rgba(94,39,80,.55);padding:8px 16px;border-radius:999px;backdrop-filter:blur(4px)}
+
+  /* ---------- section scaffolding ---------- */
+  section{position:relative;padding:78px 0}
+  .sec-head{text-align:center;max-width:640px;margin:0 auto 48px}
+  .kicker{font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--pink-candy);font-size:.78rem;margin-bottom:12px}
+  h2.sec-title{font-family:var(--font-display);font-size:clamp(2rem,4vw,2.9rem);color:var(--plum);line-height:1.08;margin-bottom:14px}
+  .sec-head p{color:var(--ink-soft);font-size:1.05rem}
+
+  /* ice cream band */
+  .icecream{background:linear-gradient(160deg,var(--magenta-deep),var(--plum));color:#fff;border-radius:0}
+  .icecream::before{
+    content:"";position:absolute;inset:0;opacity:.5;
+    background:radial-gradient(60% 60% at 85% 15%, rgba(243,193,75,.3), transparent 60%),
+              radial-gradient(50% 50% at 10% 90%, rgba(255,143,192,.4), transparent 60%);
+  }
+  .icecream .wrap{position:relative;z-index:2}
+  .ic-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:54px;align-items:center}
+  .icecream .kicker{color:var(--gold-soft)}
+  .icecream h2{font-family:var(--font-display);font-size:clamp(2rem,4vw,2.9rem);line-height:1.08;margin-bottom:8px}
+  .icecream .hook{font-family:var(--font-serif);font-style:italic;font-size:1.3rem;color:var(--gold-soft);margin-bottom:22px}
+  .icecream p{color:rgba(255,255,255,.86);margin-bottom:22px;max-width:52ch}
+  .ic-list{list-style:none;display:flex;flex-direction:column;gap:14px;margin-bottom:8px}
+  .ic-list li{display:flex;gap:14px;align-items:flex-start;background:rgba(255,255,255,.08);padding:14px 18px;border-radius:18px;border:1px solid rgba(255,255,255,.14)}
+  .ic-list .dot{flex-shrink:0;width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--gold-soft),var(--gold));display:grid;place-items:center;color:var(--plum);font-weight:800}
+  .ic-list strong{color:#fff}
+  .ic-list span{color:rgba(255,255,255,.78);font-size:.95rem}
+  .icecream .img-ph{
+    aspect-ratio:1/1;
+    background:radial-gradient(circle at 40% 30%, var(--pink-blush), var(--pink-candy) 70%);
+  }
+
+  /* menu */
+  .menu-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:26px}
+  .menu-card{
+    background:#fff;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-card);
+    transition:transform .25s, box-shadow .25s;border:1px solid var(--pink-blush);
+  }
+  .menu-card:hover{transform:translateY(-8px);box-shadow:0 34px 70px -30px rgba(181,35,107,.6)}
+  .menu-card .img-ph{aspect-ratio:16/10;border-radius:0;border:none;border-bottom:2px dashed rgba(255,255,255,.6)}
+  .menu-card.c1 .img-ph{background:linear-gradient(140deg,var(--pink-rose),var(--magenta-deep))}
+  .menu-card.c2 .img-ph{background:linear-gradient(140deg,var(--gold-soft),var(--pink-candy))}
+  .menu-card.c3 .img-ph{background:linear-gradient(140deg,var(--pink-blush),var(--pink-candy))}
+  .menu-card.c4 .img-ph{background:linear-gradient(140deg,var(--pink-candy),var(--plum))}
+  .menu-card .body{padding:22px 24px 26px}
+  .menu-card h3{font-family:var(--font-serif);font-weight:600;font-size:1.35rem;color:var(--magenta-deep);margin-bottom:8px}
+  .menu-card p{color:var(--ink-soft);font-size:.97rem}
+  .menu-foot{text-align:center;margin-top:42px}
+
+  /* promise */
+  .promise{background:var(--pink-mist)}
+  .promise-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:10px}
+  .promise-card{background:#fff;border-radius:var(--radius);padding:32px 26px;box-shadow:var(--shadow-soft);text-align:center;border:1px solid var(--pink-blush)}
+  .promise-card .ic{
+    width:62px;height:62px;border-radius:50%;margin:0 auto 18px;display:grid;place-items:center;font-size:1.6rem;
+    background:linear-gradient(135deg,var(--pink-blush),var(--pink-candy));box-shadow:var(--shadow-soft);
+  }
+  .promise-card h3{font-family:var(--font-serif);font-weight:600;font-size:1.2rem;color:var(--magenta-deep);margin-bottom:8px}
+  .promise-card p{color:var(--ink-soft);font-size:.96rem}
+
+  /* events teaser */
+  .events .wrap{position:relative;z-index:2}
+  .event-card{
+    display:grid;grid-template-columns:.8fr 1.2fr;gap:0;background:#fff;border-radius:var(--radius-lg);
+    overflow:hidden;box-shadow:var(--shadow-card);border:1px solid var(--pink-blush);
+  }
+  .event-card .img-ph{
+    border-radius:0;border:none;min-height:280px;
+    background:radial-gradient(circle at 30% 25%, var(--gold-soft), transparent 50%),linear-gradient(160deg,var(--pink-candy),var(--plum));
+  }
+  .event-body{padding:40px 44px;display:flex;flex-direction:column;justify-content:center}
+  .event-tag{align-self:flex-start;background:var(--gold);color:var(--plum);font-weight:800;font-size:.72rem;letter-spacing:1.5px;text-transform:uppercase;padding:7px 14px;border-radius:999px;margin-bottom:16px}
+  .event-body h3{font-family:var(--font-display);font-size:1.9rem;color:var(--plum);line-height:1.1;margin-bottom:10px}
+  .event-date{font-family:var(--font-serif);font-style:italic;color:var(--pink-candy);font-size:1.1rem;margin-bottom:14px}
+  .event-body p{color:var(--ink-soft);margin-bottom:24px;max-width:46ch}
+
+  /* email / guild */
+  .guild{background:linear-gradient(150deg,var(--pink-candy),var(--magenta-deep));color:#fff;text-align:center}
+  .guild::before{content:"";position:absolute;inset:0;background:radial-gradient(50% 70% at 50% 0%, rgba(255,223,142,.35),transparent 60%)}
+  .guild .wrap{position:relative;z-index:2;max-width:620px}
+  .guild h2{font-family:var(--font-display);font-size:clamp(2rem,4vw,2.8rem);margin-bottom:14px}
+  .guild p{color:rgba(255,255,255,.9);font-size:1.08rem;margin-bottom:30px}
+  .guild-form{display:flex;gap:12px;max-width:480px;margin:0 auto;flex-wrap:wrap}
+  .guild-form input{
+    flex:1;min-width:220px;border:none;border-radius:999px;padding:16px 24px;font-family:var(--font-body);font-size:1rem;color:var(--ink);
+    box-shadow:var(--shadow-card);
+  }
+  .guild-form input:focus{outline:3px solid var(--gold-soft)}
+  .guild-form .btn-join{background:var(--gold);color:var(--plum);font-weight:800;padding:16px 32px;border-radius:999px;border:none;cursor:pointer;transition:transform .2s}
+  .guild-form .btn-join:hover{transform:translateY(-2px)}
+
+  /* footer */
+  footer{background:var(--plum);color:rgba(255,255,255,.8);padding:54px 0 30px}
+  .foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:40px;margin-bottom:38px}
+  footer .brand{color:#fff;margin-bottom:14px}
+  footer p{font-size:.95rem;max-width:38ch;line-height:1.7}
+  .foot-col h4{font-family:var(--font-serif);color:var(--gold-soft);margin-bottom:14px;font-size:1.05rem;font-weight:600}
+  .foot-col a{display:block;color:rgba(255,255,255,.75);text-decoration:none;margin-bottom:9px;font-size:.95rem;transition:color .2s}
+  .foot-col a:hover{color:var(--pink-rose)}
+  .socials{display:flex;gap:12px;margin-top:6px}
+  .socials a{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.12);display:grid;place-items:center;color:#fff;font-weight:700;text-decoration:none;transition:.2s}
+  .socials a:hover{background:var(--pink-candy);transform:translateY(-3px)}
+  .foot-bottom{border-top:1px solid rgba(255,255,255,.15);padding-top:22px;text-align:center;font-size:.85rem;color:rgba(255,255,255,.6)}
+
+  /* ---------- CSS dessert illustrations (placeholder for real photos) ---------- */
+  .illus{position:relative;display:grid;place-items:center;overflow:hidden}
+  .illus svg{width:78%;height:78%;max-width:280px;filter:drop-shadow(0 14px 22px rgba(94,39,80,.28))}
+  .illus .photo-note{
+    position:absolute;bottom:12px;left:50%;transform:translateX(-50%);z-index:3;
+    font-size:.66rem;font-weight:700;letter-spacing:.6px;text-transform:uppercase;
+    background:rgba(94,39,80,.5);color:#fff;padding:5px 12px;border-radius:999px;backdrop-filter:blur(4px);
+    white-space:nowrap;
+  }
+  .illus .float-svg{animation:float 6s ease-in-out infinite}
+  /* sit illustrations on a soft pink wash instead of the flat gradient blocks */
+  .menu-card .illus{aspect-ratio:16/10;background:radial-gradient(circle at 50% 38%, var(--pink-mist), var(--pink-blush));border-bottom:1px solid var(--pink-blush)}
+  .hero-visual .illus{aspect-ratio:4/5;border-radius:var(--radius-lg);background:radial-gradient(circle at 40% 30%, var(--pink-mist), var(--pink-blush) 70%);box-shadow:var(--shadow-card);animation:float 6s ease-in-out infinite}
+  .icecream .illus{aspect-ratio:1/1;border-radius:var(--radius-lg);background:radial-gradient(circle at 45% 35%, #fff, var(--pink-blush));box-shadow:var(--shadow-card)}
+  .event-card .illus{min-height:280px;background:radial-gradient(circle at 35% 30%, var(--pink-mist), var(--pink-rose))}
+
+  /* scroll reveal */
+  .reveal{opacity:0;transform:translateY(30px);transition:opacity .7s ease, transform .7s ease}
+  .reveal.in{opacity:1;transform:none}
+
+  /* ---------- responsive ---------- */
+  @media(max-width:920px){
+    .ic-grid,.event-card{grid-template-columns:1fr}
+    .menu-grid{grid-template-columns:1fr 1fr}
+    .promise-grid{gap:16px}
+    .promise-card{padding:26px 18px}
+    .foot-grid{grid-template-columns:1fr 1fr}
+    .event-card .img-ph{min-height:200px}
+    /* shrink the side illustration so it doesn't crowd the copy */
+    .hero-photo .illus{width:min(34%,260px);right:3%;opacity:.92}
+  }
+  @media(max-width:620px){
+    .nav-links{
+      display:none;position:absolute;top:100%;left:0;right:0;flex-direction:column;
+      background:var(--cream);padding:20px 24px;gap:16px;box-shadow:var(--shadow-card);
+    }
+    .nav-links.open{display:flex}
+    .hamburger{display:flex}
+    .menu-grid,.promise-grid,.foot-grid{grid-template-columns:1fr}
+    section{padding:58px 0}
+    .event-body{padding:30px 26px}
+    /* on phones: hide the side illustration, keep a soft pastel wash, full-width readable copy */
+    .hero{min-height:clamp(420px,72vh,560px)}
+    .hero-photo .illus{display:none}
+    .hero-photo::after{background:linear-gradient(180deg, rgba(255,233,243,.82) 0%, rgba(255,233,243,.55) 55%, rgba(255,209,230,.3) 100%)}
+    .hero-copy{max-width:none}
+  }
+</style>
+</head>
+<body>
+
+<div class="sparkles" id="sparkles" aria-hidden="true"></div>
+
+<!-- NAV -->
+<header class="nav">
+  <div class="nav-inner">
+    <a href="#" class="brand"><span class="mark">✦</span> Wand &amp; Whisk</a>
+    <nav class="nav-links" id="navLinks">
+      <a href="#menu">Menu</a>
+      <a href="#about">About Us</a>
+      <a href="#events">Events</a>
+      <a href="#guild" class="nav-cta">Join the Guild</a>
+    </nav>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <!-- full-bleed photo banner (illustration is a stand-in for the real hero photo) -->
+  <div class="hero-photo">
+    <div class="illus">
+      <svg viewBox="0 0 220 280" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustration of a strawberry crepe cone with whipped cream and a star">
+        <defs>
+          <linearGradient id="creamG" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#ffe3f0"/>
+          </linearGradient>
+          <linearGradient id="coneG" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#ffd1e6"/><stop offset="1" stop-color="#ff8fc0"/>
+          </linearGradient>
+        </defs>
+        <!-- cone -->
+        <path d="M88 150 L132 150 L116 268 Q110 276 104 268 Z" fill="url(#coneG)" stroke="#b5236b" stroke-width="3" stroke-linejoin="round"/>
+        <path d="M95 168 L125 168 M99 188 L121 188 M103 208 L117 208" stroke="#b5236b" stroke-width="2" stroke-linecap="round" opacity=".5"/>
+        <!-- whipped swirl -->
+        <path d="M70 150 Q60 120 80 112 Q72 92 96 92 Q98 70 116 80 Q132 66 142 90 Q162 92 150 114 Q166 126 150 150 Z" fill="url(#creamG)" stroke="#b5236b" stroke-width="3" stroke-linejoin="round"/>
+        <!-- strawberries -->
+        <circle cx="98" cy="116" r="11" fill="#ff5da2" stroke="#b5236b" stroke-width="2.5"/>
+        <circle cx="132" cy="112" r="10" fill="#ff5da2" stroke="#b5236b" stroke-width="2.5"/>
+        <circle cx="95" cy="113" r="1.6" fill="#fff"/><circle cx="103" cy="119" r="1.6" fill="#fff"/>
+        <circle cx="129" cy="109" r="1.6" fill="#fff"/><circle cx="136" cy="115" r="1.6" fill="#fff"/>
+        <!-- star topper -->
+        <path d="M116 54 l5 13 14 1 -11 9 4 14 -12 -8 -12 8 4 -14 -11 -9 14 -1 z" fill="#f3c14b" stroke="#b5236b" stroke-width="2.5" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <span class="photo-note">✦ Hero photo lands here (person enjoying the ice cream)</span>
+  </div>
+  <!-- overlaid copy: vertically centered, left-aligned -->
+  <div class="wrap">
+    <div class="hero-copy reveal">
+      <span class="eyebrow">✦ Little Rock, Arkansas</span>
+      <h1>Luxury Desserts for the <span class="glow">Wayward Adventurer</span></h1>
+      <p class="sub">Arkansas's only Japanese-inspired dessert and luxury ice cream café.</p>
+      <p class="lede">Step into a sweet escape from the ordinary. Handcrafted crepes, taiyaki soft serve, fluffy soufflé pancakes, and colorful potion sodas, served in a little pocket dimension away from the outside world.</p>
+      <div class="hero-ctas">
+        <a href="#menu" class="btn btn-primary">View Menu ✦</a>
+        <a href="#guild" class="btn btn-ghost">Join the Guild</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ICE CREAM -->
+<section class="icecream" id="icecream">
+  <div class="wrap ic-grid">
+    <div class="reveal">
+      <div class="illus">
+        <svg viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustration of a luxury soft serve swirl">
+          <defs>
+            <linearGradient id="swirlG" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#ffd1e6"/>
+            </linearGradient>
+            <linearGradient id="cupG" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#ff8fc0"/><stop offset="1" stop-color="#b5236b"/>
+            </linearGradient>
+          </defs>
+          <!-- cup -->
+          <path d="M74 138 L146 138 L134 196 Q132 204 124 204 L96 204 Q88 204 86 196 Z" fill="url(#cupG)" stroke="#5e2750" stroke-width="3" stroke-linejoin="round"/>
+          <ellipse cx="110" cy="138" rx="36" ry="9" fill="#ff5da2" stroke="#5e2750" stroke-width="3"/>
+          <!-- swirl layers -->
+          <path d="M78 138 Q70 110 96 104 Q84 84 108 80 Q128 78 130 96 Q150 96 142 118 Q156 124 142 138 Z" fill="url(#swirlG)" stroke="#b5236b" stroke-width="3" stroke-linejoin="round"/>
+          <path d="M96 104 Q108 100 120 104" stroke="#b5236b" stroke-width="2" fill="none" opacity=".5" stroke-linecap="round"/>
+          <path d="M92 118 Q110 112 128 118" stroke="#b5236b" stroke-width="2" fill="none" opacity=".5" stroke-linecap="round"/>
+          <!-- cherry -->
+          <circle cx="110" cy="68" r="9" fill="#ff5da2" stroke="#5e2750" stroke-width="2.5"/>
+          <path d="M110 60 Q118 50 124 52" stroke="#5e2750" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <!-- sparkles -->
+          <path d="M60 96 l2 6 6 2 -6 2 -2 6 -2 -6 -6 -2 6 -2 z" fill="#f3c14b"/>
+          <path d="M158 80 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2 z" fill="#f3c14b"/>
+        </svg>
+        <span class="photo-note">✦ Soft serve photo lands here</span>
+      </div>
+    </div>
+    <div class="reveal">
+      <p class="kicker">Real Ice Cream, Made in Little Rock</p>
+      <h2>You've never tasted ice cream quite like this</h2>
+      <p class="hook">So we built something better.</p>
+      <p>Most shops call their product "soft serve" because it doesn't meet the USDA definition of ice cream. They lean on fillers to keep costs down. We wanted more, so here's what actually goes into ours:</p>
+      <ul class="ic-list">
+        <li><span class="dot">✦</span><div><strong>Real milk cream at 12.5% milk fat.</strong> <span>Meets the USDA standard for ice cream, about double what you'll find elsewhere in Arkansas.</span></div></li>
+        <li><span class="dot">✦</span><div><strong>Japan's exacting standards.</strong> <span>Quality benchmarks modeled on Japan's luxury soft serve tradition.</span></div></li>
+        <li><span class="dot">✦</span><div><strong>A certified chef on every batch.</strong> <span>Swirled into taiyaki cones, potion floats, and seasonal Guild creations.</span></div></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- MENU -->
+<section class="menu" id="menu">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="kicker">The Menu</p>
+      <h2 class="sec-title">Unique Treats You Can't Find Anywhere Else</h2>
+      <p>Handcrafted sweets, specialty soft serve, and colorful drinks made to feel both nostalgic and new.</p>
+    </div>
+    <div class="menu-grid">
+      <article class="menu-card c1 reveal">
+        <div class="illus">
+          <svg viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Rolled Japanese crepe illustration">
+            <defs><linearGradient id="cr1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe9f3"/><stop offset="1" stop-color="#ff8fc0"/></linearGradient></defs>
+            <path d="M88 44 L120 44 L108 134 Q102 142 96 134 Z" fill="url(#cr1)" stroke="#b5236b" stroke-width="3" stroke-linejoin="round"/>
+            <path d="M94 64 L114 64 M97 84 L111 84" stroke="#b5236b" stroke-width="2" opacity=".45" stroke-linecap="round"/>
+            <path d="M74 44 Q66 22 88 18 Q104 6 118 22 Q138 22 128 44 Z" fill="#fff" stroke="#b5236b" stroke-width="3" stroke-linejoin="round"/>
+            <circle cx="92" cy="30" r="8" fill="#ff5da2" stroke="#b5236b" stroke-width="2"/>
+            <circle cx="116" cy="28" r="7" fill="#ff5da2" stroke="#b5236b" stroke-width="2"/>
+            <path d="M101 6 l3 8 9 1 -7 6 2 9 -7 -5 -7 5 2 -9 -7 -6 9 -1 z" fill="#f3c14b" stroke="#b5236b" stroke-width="1.8" stroke-linejoin="round"/>
+          </svg>
+          <span class="photo-note">✦ Photo lands here</span>
+        </div>
+        <div class="body"><h3>Japanese-Inspired Crepes</h3><p>Freshly rolled and filled with whipped cream, fruit, sauces, and specialty toppings.</p></div>
+      </article>
+      <article class="menu-card c2 reveal">
+        <div class="illus">
+          <svg viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Taiyaki fish cone with soft serve illustration">
+            <defs><linearGradient id="ty1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffdf8e"/><stop offset="1" stop-color="#f3c14b"/></linearGradient></defs>
+            <!-- fish body -->
+            <path d="M60 96 Q60 70 100 70 Q132 70 140 88 L156 78 L156 114 L140 104 Q132 122 100 122 Q60 122 60 96 Z" fill="url(#ty1)" stroke="#b5236b" stroke-width="3" stroke-linejoin="round"/>
+            <circle cx="78" cy="90" r="4" fill="#5e2750"/>
+            <path d="M96 84 L124 84 M96 96 L128 96 M100 108 L126 108" stroke="#b5236b" stroke-width="1.6" opacity=".4" stroke-linecap="round"/>
+            <!-- soft serve on top -->
+            <path d="M82 70 Q76 50 96 46 Q90 32 110 34 Q124 36 120 52 Q134 56 122 70 Z" fill="#fff" stroke="#b5236b" stroke-width="3" stroke-linejoin="round"/>
+            <path d="M86 58 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2 z" fill="#ff5da2"/>
+          </svg>
+          <span class="photo-note">✦ Photo lands here</span>
+        </div>
+        <div class="body"><h3>Taiyaki Soft Serve</h3><p>Warm fish-shaped pastry cones filled with custard or Nutella and topped with our in-house soft serve.</p></div>
+      </article>
+      <article class="menu-card c3 reveal">
+        <div class="illus">
+          <svg viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Stack of soufflé pancakes with butter illustration">
+            <defs><linearGradient id="pk1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe9d6"/><stop offset="1" stop-color="#ff8fc0"/></linearGradient></defs>
+            <ellipse cx="100" cy="118" rx="52" ry="16" fill="#ff8fc0" stroke="#b5236b" stroke-width="3"/>
+            <ellipse cx="100" cy="100" rx="50" ry="15" fill="url(#pk1)" stroke="#b5236b" stroke-width="3"/>
+            <ellipse cx="100" cy="82" rx="46" ry="14" fill="url(#pk1)" stroke="#b5236b" stroke-width="3"/>
+            <ellipse cx="100" cy="66" rx="40" ry="13" fill="url(#pk1)" stroke="#b5236b" stroke-width="3"/>
+            <!-- butter pat -->
+            <rect x="86" y="50" width="28" height="16" rx="4" fill="#ffdf8e" stroke="#b5236b" stroke-width="2.5"/>
+            <!-- drip -->
+            <path d="M70 60 Q66 78 74 86" stroke="#f3c14b" stroke-width="4" fill="none" stroke-linecap="round"/>
+            <path d="M132 58 Q138 76 130 86" stroke="#f3c14b" stroke-width="4" fill="none" stroke-linecap="round"/>
+            <path d="M150 44 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2 z" fill="#f3c14b"/>
+          </svg>
+          <span class="photo-note">✦ Photo lands here</span>
+        </div>
+        <div class="body"><h3>Soufflé Pancakes</h3><p>Light, fluffy Japanese-style pancakes served with magical toppings and sweet finishes.</p></div>
+      </article>
+      <article class="menu-card c4 reveal">
+        <div class="illus">
+          <svg viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Potion soda with wand swizzle stick illustration">
+            <defs><linearGradient id="ps1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff8fc0"/><stop offset="1" stop-color="#b5236b"/></linearGradient></defs>
+            <path d="M76 44 L124 44 L118 128 Q116 136 108 136 L92 136 Q84 136 82 128 Z" fill="url(#ps1)" stroke="#5e2750" stroke-width="3" stroke-linejoin="round"/>
+            <ellipse cx="100" cy="44" rx="24" ry="6" fill="#ffd1e6" stroke="#5e2750" stroke-width="3"/>
+            <!-- bubbles -->
+            <circle cx="94" cy="70" r="4" fill="#fff" opacity=".8"/><circle cx="108" cy="84" r="3" fill="#fff" opacity=".8"/>
+            <circle cx="98" cy="100" r="3.5" fill="#fff" opacity=".8"/><circle cx="106" cy="60" r="2.5" fill="#fff" opacity=".8"/>
+            <!-- wand swizzle with star -->
+            <line x1="116" y1="20" x2="96" y2="60" stroke="#f3c14b" stroke-width="4" stroke-linecap="round"/>
+            <path d="M120 8 l3 9 9 1 -7 6 2 9 -7 -5 -7 5 2 -9 -7 -6 9 -1 z" fill="#f3c14b" stroke="#b5236b" stroke-width="1.8" stroke-linejoin="round"/>
+          </svg>
+          <span class="photo-note">✦ Photo lands here</span>
+        </div>
+        <div class="body"><h3>Potion Sodas</h3><p>Colorful sparkling drinks served with wand swizzle sticks so guests can mix up the magic themselves.</p></div>
+      </article>
+    </div>
+    <div class="menu-foot reveal"><a href="#" class="btn btn-primary">Explore the Full Menu ✦</a></div>
+  </div>
+</section>
+
+<!-- PROMISE -->
+<section class="promise" id="about">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="kicker">Our Promise</p>
+      <h2 class="sec-title">Visit Little Rock's Premier Japanese-Themed Café</h2>
+      <p>Here's what we promise every guest who walks through the door.</p>
+    </div>
+    <div class="promise-grid">
+      <div class="promise-card reveal"><div class="ic">✦</div><h3>Hospitality First</h3><p>It hits you the moment you walk through the door, every single visit.</p></div>
+      <div class="promise-card reveal"><div class="ic">🍦</div><h3>Made in Front of You</h3><p>Watch your sweet treats come together, right down the line, by someone who knows what they're doing.</p></div>
+      <div class="promise-card reveal"><div class="ic">✧</div><h3>A Fully Immersive Space</h3><p>A little pocket dimension where the outside world disappears for a while.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- EVENTS TEASER -->
+<section class="events" id="events">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="kicker">Events &amp; Specials</p>
+      <h2 class="sec-title">The Dessert Guild Is Always Experimenting</h2>
+      <p>Exclusive tastings, themed experiences, seasonal flavor drops, and collaborations with our community.</p>
+    </div>
+    <div class="event-card reveal">
+      <div class="illus">
+        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Matcha drink with whipped cream illustration">
+          <defs><linearGradient id="mt1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#bfe08a"/><stop offset="1" stop-color="#7fae4b"/></linearGradient></defs>
+          <path d="M74 96 L146 96 L134 176 Q132 184 124 184 L96 184 Q88 184 86 176 Z" fill="url(#mt1)" stroke="#5e2750" stroke-width="3" stroke-linejoin="round"/>
+          <ellipse cx="110" cy="96" rx="36" ry="9" fill="#a7d172" stroke="#5e2750" stroke-width="3"/>
+          <!-- whipped cream dome -->
+          <path d="M82 96 Q74 64 110 60 Q146 64 138 96 Z" fill="#fff" stroke="#b5236b" stroke-width="3" stroke-linejoin="round"/>
+          <!-- straw -->
+          <line x1="128" y1="40" x2="116" y2="92" stroke="#ff5da2" stroke-width="6" stroke-linecap="round"/>
+          <!-- star + sparkles -->
+          <path d="M110 44 l4 11 12 1 -9 8 3 12 -10 -7 -10 7 3 -12 -9 -8 12 -1 z" fill="#f3c14b" stroke="#b5236b" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M60 80 l2 6 6 2 -6 2 -2 6 -2 -6 -6 -2 6 -2 z" fill="#fff"/>
+          <path d="M158 110 l2 6 6 2 -6 2 -2 6 -2 -6 -6 -2 6 -2 z" fill="#fff"/>
+        </svg>
+        <span class="photo-note">✦ Event photo lands here</span>
+      </div>
+      <div class="event-body">
+        <span class="event-tag">Featured · Coming Soon</span>
+        <h3>Magical Girl Matcha Night</h3>
+        <p class="event-date">Date to be announced ✦ Reserve early</p>
+        <p>A limited-run tasting of seasonal matcha creations from the Guild, with themed décor and a few surprises we're not ready to spoil yet.</p>
+        <a href="#" class="btn btn-primary">Explore Events &amp; Specials ✦</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GUILD / EMAIL -->
+<section class="guild" id="guild">
+  <div class="wrap reveal">
+    <h2>Join the Guild ✦</h2>
+    <p>Become an honorary member of the Wand &amp; Whisk Dessert Guild and be the first to hear about new ice cream flavors, limited-time items, seasonal specials, and your next escape.</p>
+    <form class="guild-form" onsubmit="return false;">
+      <input type="email" placeholder="your@email.com" aria-label="Email address" required>
+      <button class="btn-join" type="submit">Join ✦</button>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="brand"><span class="mark">✦</span> Wand &amp; Whisk Café</div>
+        <p>A locally owned Japanese-inspired dessert and luxury ice cream café in Little Rock, Arkansas. A sweet escape from the ordinary.</p>
+        <div class="socials">
+          <a href="#" aria-label="Instagram">IG</a>
+          <a href="#" aria-label="TikTok">TT</a>
+          <a href="#" aria-label="Facebook">FB</a>
+        </div>
+      </div>
+      <div class="foot-col">
+        <h4>Explore</h4>
+        <a href="#menu">Menu</a>
+        <a href="#icecream">Our Ice Cream</a>
+        <a href="#events">Events &amp; Specials</a>
+        <a href="#guild">Join the Guild</a>
+      </div>
+      <div class="foot-col">
+        <h4>Visit</h4>
+        <a href="#">Little Rock, AR</a>
+        <a href="#">Hours &amp; Location</a>
+        <a href="#">Gift Cards</a>
+        <a href="#">Contact</a>
+      </div>
+    </div>
+    <div class="foot-bottom">© 2026 Wand &amp; Whisk Café · Little Rock, Arkansas · Design proof</div>
+  </div>
+</footer>
+
+<script>
+  // mobile nav
+  const ham=document.getElementById('hamburger');
+  const links=document.getElementById('navLinks');
+  ham.addEventListener('click',()=>links.classList.toggle('open'));
+  links.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>links.classList.remove('open')));
+
+  // scroll reveal
+  const io=new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}});
+  },{threshold:.15});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+  // sparkle generator
+  const sk=document.getElementById('sparkles');
+  const chars=['✦','✧','⋆','✶'];
+  for(let i=0;i<28;i++){
+    const s=document.createElement('span');
+    s.className='sparkle';
+    s.textContent=chars[Math.floor(Math.random()*chars.length)];
+    s.style.left=Math.random()*100+'%';
+    s.style.top=Math.random()*100+'%';
+    s.style.fontSize=(Math.random()*14+8)+'px';
+    s.style.animationDelay=(Math.random()*4)+'s';
+    s.style.animationDuration=(Math.random()*3+3)+'s';
+    sk.appendChild(s);
+  }
+</script>
+</body>
+</html>
